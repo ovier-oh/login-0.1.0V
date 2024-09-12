@@ -1,6 +1,6 @@
 import sys 
 import requests 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QBoxLayout, QWidget, QMessageBox 
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QMessageBox 
 
 class LoginWindow(QMainWindow):
     def __init_(self):
@@ -18,4 +18,12 @@ class LoginWindow(QMainWindow):
         self.login_button = QPushButton('Login', self) 
         self.logout_button = QPushButton('Logout', self) 
 
+        # Creando layout
+        layout = QVBoxLayout() 
+        layout = addWidget(self.username_label)
+        layout = addWidget(self.username_input) 
+        layout = addWidget(self.password_label)
+        layout = addWidget(self.password_input) 
+        layout = addWidget(self.login_button)
+        layout = addWidget(self.logout_button) 
         
