@@ -7,7 +7,7 @@ app = Flask(__name__)
 # crear la base de datos y la tabla de usuarios si no existen 
 def init_db():
     conn = sqlite3.connect('users.db')
-    cursor = con.cursor()
+    cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS  users (
             id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -36,15 +36,15 @@ def login():
     password = data.get('password')
     
     conn = sqlite3.connect('users.db')
-    cursor.conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE username =? AND ppassdowrd = ?", (username, passowrd))
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
     user = cursor.fetchone()
     conn.close()
-    
-    if user: 
-        return jsonify({"message":"Login successful"}), 200
+
+    if user:
+        return jsonify({"message": "Login successful"}), 200
     else:
-        return jsonify({"mesage":"login failed"}), 401
+        return jsonify({"message": "Login failed"}), 401
 
 
 @app.route('/logout', methods=['POST'])
@@ -54,15 +54,16 @@ def logout():
 @app.route('/users', methods=['GET'])
 def get_user():
     conn = sqlite3.connect('users.db')
+    cursor = conn.cursor()
     cursor.execute("SELECT id, nombre, edad, telefono, email, username FROM users")
     users = cursor.fetchall() 
     conn.close() 
 
-    return jsonify(isers), 200
+    return jsonify(users), 200
 
 @app.route('/add_user', methods=['POST'])
 def add_user():
-    data = request.getjson()
+    data = request.get_json()
     nombre = data.get('nombre')
     edad = data.get('edad')
     telefono = data.get('telefono')
@@ -70,11 +71,11 @@ def add_user():
     username = data.get('username')
     password = data.get('password')
 
-    conn = sqlite3.connect('user.db')
+    conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
     try:
         cursor.execute(''' 
-            INSERT INTO users (nombre, edad, telefono, email, username, passowrd)
+            INSERT INTO users (nombre, edad, telefono, email, username, password)
             VALUES (?, ?, ?, ?, ?, ?)
         ''', (nombre, edad, telefono, email, username, password))
         conn.commit()
@@ -85,15 +86,16 @@ def add_user():
         return jsonify({"message": "User already exists"}), 400
 
 
-@app.route('/delete_user/<username>', methods=['DELETE'])
-def delete_user(username):
+@app.route('/delete_user/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
     conn = sqlite3.connect('users.db')
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM users WHERE id = ?", (id,))
+    cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
     conn.commit()
     conn.close()
     
-    return jsonify({"message": "User deleted successfully"}), 20
+    return jsonify({"message": "User deleted successfully"}), 200
+
 
 
 if __name__ == '__main__':

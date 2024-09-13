@@ -1,6 +1,7 @@
 import sys
 import requests
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, QVBoxLayout, QWidget, QMessageBox
+from admin_gui import AdminWindow 
 
 
 class LoginWindow(QMainWindow):
@@ -70,16 +71,11 @@ class LoginWindow(QMainWindow):
         self.admin_window = AdminWindow()
         self.admin_window.show()
 
-
-class AdminWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle('Admin User Management')
-        self.setGeometry(100, 100, 400, 300)
-
-        # Aquí puedes agregar los elementos y funciones de la administración de usuarios
-        # como obtener la lista de usuarios, agregar o eliminar usuarios
-
+    def open_admin_window(self):
+        """Cierra la ventana login y abre el dashoard de administracion"""
+        self.hide()
+        self.admin_window = AdminWindow()
+        self.admin_window.show() 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
