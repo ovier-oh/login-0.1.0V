@@ -1,12 +1,12 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QTableWidget, QTableWidgetItem, QPushButton, QWidget, QHBoxLayout, QMessageBox
+from PyQt5.QtWidgets import (QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, 
+                             QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidgetItem, 
+                             QWidget, QMessageBox)
 import requests
-
 
 class AdminWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
         self.setWindowTitle('Admin User Management')
         self.setGeometry(100, 100, 600, 400)
 
