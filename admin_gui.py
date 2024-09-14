@@ -1,25 +1,92 @@
 import sys
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QLabel, QLineEdit, QPushButton, 
                              QVBoxLayout, QHBoxLayout, QTableWidget, QTableWidgetItem, 
-                             QWidget, QMessageBox)
+                             QWidget, QMessageBox, QFrame, QDesktopWidget)
+from PyQt5.QtGui import QFont
+from PyQt5.QtCore import Qt
 import requests
 
 class AdminWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle('Admin User Management')
-        self.setGeometry(100, 100, 600, 400)
+        self.setGeometry(100, 100, 800, 500)  # Tamaño más grande
+
+        # Centrar la ventana
+        self.center_window()
 
         # Crear los widgets
         self.table_widget = QTableWidget()
         self.load_users_button = QPushButton('Cargar usuarios')
         self.add_user_button = QPushButton('Añadir nuevo usuario')
+        self.logout_button = QPushButton('Cerrar sesión')
+
+        # Aplicar estilo a los botones
+        self.load_users_button.setStyleSheet("""
+            QPushButton {
+                background-color: black;
+                color: white;
+                border-radius: 10px;
+                padding: 10px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: gray;
+            }
+        """)
+
+        self.add_user_button.setStyleSheet("""
+            QPushButton {
+                background-color: black;
+                color: white;
+                border-radius: 10px;
+                padding: 10px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: gray;
+            }
+        """)
+
+        self.logout_button.setStyleSheet("""
+            QPushButton {
+                background-color: red;
+                color: white;
+                border-radius: 10px;
+                padding: 10px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: darkred;
+            }
+        """)
+
+        # Crear el layout para los botones y tabla
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.load_users_button)
+        button_layout.addWidget(self.add_user_button)
+        button_layout.addWidget(self.logout_button)
 
         # Layout principal
         layout = QVBoxLayout()
-        layout.addWidget(self.load_users_button)
-        layout.addWidget(self.add_user_button)
+        layout.setAlignment(Qt.AlignCenter)  # Centrar el contenido
+        layout.addLayout(button_layout)
         layout.addWidget(self.table_widget)
+
+        # Aplicar estilo a la tabla
+        self.table_widget.setStyleSheet("""
+            QTableWidget {
+                border: 2px solid gray;
+                border-radius: 10px;
+                padding: 5px;
+                font-size: 14px;
+            }
+            QHeaderView::section {
+                background-color: black;
+                color: white;
+                font-weight: bold;
+            }
+        """)
 
         # Crear un contenedor
         container = QWidget()
@@ -29,6 +96,14 @@ class AdminWindow(QMainWindow):
         # Conectar botones a funciones
         self.load_users_button.clicked.connect(self.load_users)
         self.add_user_button.clicked.connect(self.show_add_user_form)
+        self.logout_button.clicked.connect(self.logout)
+
+    def center_window(self):
+        """Centrar la ventana en la pantalla"""
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
 
     def load_users(self):
         """Carga la lista de usuarios desde el servidor"""
@@ -78,6 +153,13 @@ class AdminWindow(QMainWindow):
         self.add_user_form = AddUserForm()
         self.add_user_form.show()
 
+    def logout(self):
+        """Cerrar sesión y volver al login"""
+        confirmation = QMessageBox.question(self, 'Confirmación', '¿Seguro que deseas cerrar sesión?', 
+                                            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if confirmation == QMessageBox.Yes:
+            self.close()  # Cierra la ventana actual de administración
+
 
 class AddUserForm(QWidget):
     def __init__(self):
@@ -101,6 +183,20 @@ class AddUserForm(QWidget):
 
         # Botón de agregar
         self.add_button = QPushButton('Agregar Usuario')
+
+        # Aplicar estilo al botón de agregar
+        self.add_button.setStyleSheet("""
+            QPushButton {
+                background-color: black;
+                color: white;
+                border-radius: 10px;
+                padding: 10px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: gray;
+            }
+        """)
 
         # Layout del formulario
         form_layout = QVBoxLayout()
