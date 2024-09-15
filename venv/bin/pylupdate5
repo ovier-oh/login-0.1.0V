@@ -1,4 +1,4 @@
-#!/home/ovieroh/Documents/login-0.1.0V/venv/bin/python3
+#!/home/ovier/Documentos/login-0.1.0V/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
